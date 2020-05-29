@@ -129,7 +129,7 @@ public class StateManager {
         while(!tmpStack.isEmpty()){
             BigDecimal out = tmpStack.pop();
             //打印精度设为10（原存储精度15)
-            BigDecimal numafter = out.setScale(10,BigDecimal.ROUND_HALF_UP);
+            BigDecimal numafter = out.setScale(10,BigDecimal.ROUND_DOWN);
             sb.append(numafter.stripTrailingZeros().toPlainString()+" ");
             numberStack.push(out);
         }
@@ -215,7 +215,7 @@ public class StateManager {
             }
         }else if(type==0){
             //操作数,操作数入栈，更新反操作到undolog栈的栈顶
-            BigDecimal val = (new BigDecimal(element)).setScale(15, BigDecimal.ROUND_HALF_UP);
+            BigDecimal val = (new BigDecimal(element)).setScale(15, BigDecimal.ROUND_DOWN);
             numberStack.push(val);
             UndoLog undo = new UndoLog();
             undo.addAction('-', null);
