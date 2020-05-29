@@ -17,8 +17,16 @@ java -jar calculator-1.0-SNAPSHOT.jar
 
 ```
 请输入RPN格式的表达式(可多行输入),输入q退出：
-3 2 -
-stack: 1
+ab
+非法输入...
+stack:
+1 2 +
+stack: 3
+ka
+非法输入...
+stack: 3
+2 *
+stack: 6
 q
 退出计算器
 ```
