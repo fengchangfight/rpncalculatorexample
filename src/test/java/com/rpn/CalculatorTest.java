@@ -25,7 +25,7 @@ public class CalculatorTest {
     public static final List<String> stackState = Arrays.asList(
             "stack: 5 2",
             "stack: 3",
-            "stack: ",
+            "stack:",
             "stack: 20 5",
             "stack: 10.5",
             "stack: -1",

@@ -53,7 +53,7 @@ public class StateManager {
      * 解析器扫描游标记录,目前在行内解析到了第几个字符
      */
     private Integer rowIndex=0;
-    
+
     public void resetAll(){
         clear();
         rowIndex = 0;
@@ -109,7 +109,7 @@ public class StateManager {
         StringBuilder sb = new StringBuilder();
         sb.append("stack: ");
         if(numberStack.isEmpty()){
-            return sb.toString();
+            return sb.toString().trim();
         }
         Stack<BigDecimal> tmpStack = new Stack<>();
         while(!numberStack.isEmpty()){
