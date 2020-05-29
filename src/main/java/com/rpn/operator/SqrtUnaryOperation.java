@@ -12,6 +12,12 @@ public class SqrtUnaryOperation extends BaseUnaryOperation {
 
     @Override
     public BigDecimal doOperation(BigDecimal op){
-        return new BigDecimal(Math.sqrt(op.doubleValue()));
+        return sqrt(op);
+    }
+
+    private static BigDecimal sqrt(BigDecimal value) {
+        BigDecimal x = new BigDecimal(Math.sqrt(value.doubleValue()));
+        return x.add(new BigDecimal(value.subtract(x.multiply(x)).doubleValue() / (x.doubleValue() * 2.0)));
+
     }
 }
