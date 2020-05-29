@@ -9,7 +9,6 @@ import com.rpn.manager.StateManager;
  */
 public class Calculator {
 
-
     private StateManager stateManager;
 
     public StateManager getStateManager(){

@@ -182,16 +182,21 @@ public class StateManager {
             //弹出两个操作数
             UndoLog undo = new UndoLog();
             BigDecimal secondVal = numberStack.pop();
-            undo.addAction('+', secondVal);
             BigDecimal firstVal  = numberStack.pop();
+            undo.addAction('+', secondVal);
             undo.addAction('+', firstVal);
 
             BaseBinaryOperation binop = OperatorFactory.makeBinaryOperation(element);
-            BigDecimal ret = binop.doOperation(firstVal, secondVal);
-            numberStack.push(ret);
-
-            undo.addAction('-', null);
             undoLogStack.push(undo);
+
+            try{
+                BigDecimal ret = binop.doOperation(firstVal, secondVal);
+                numberStack.push(ret);
+                undo.addAction('-', null);
+            }catch (RuntimeException e){
+                //复原两个弹出参数
+                applyLastUndoLog();
+            }
         }else if(type==5)
         {
             //操作指令， 如clear, undo
