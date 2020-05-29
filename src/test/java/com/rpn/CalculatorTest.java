@@ -43,9 +43,7 @@ public class CalculatorTest {
             String input = inputs.get(i);
             String expectedOutput = stackState.get(i);
             rpn.getStateManager().addNewLine(input);
-            //尝试结合之前的全局状态，极限解析当前行的内容，直到解析完整当前行或者碰到不合法输入或者操作数不够，则停止解析，并打印更新后的栈状态
             rpn.getStateManager().parseLine();
-
             // check state
             String actualContent = rpn.getStateManager().getStackContent();
             assertEquals(expectedOutput, actualContent);
