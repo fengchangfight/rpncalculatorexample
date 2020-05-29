@@ -11,6 +11,6 @@ public class DivideOperation extends BaseBinaryOperation {
     }
     @Override
     public BigDecimal doOperation(BigDecimal op1, BigDecimal op2){
-        return op1.divide(op2);
+        return op1.divide(op2,15, BigDecimal.ROUND_DOWN);
     }
 }
