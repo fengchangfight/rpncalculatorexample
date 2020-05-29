@@ -20,7 +20,10 @@ public class CalculatorTest {
             "7 12 2 / * 4 /",
             "1 2 3 4 5 * clear 3 4 -",
             "1 2 3 4 5 * * * *",
-            "1 2 3 * 5 + * * 6 5");
+            "1 2 3 * 5 + * * 6 5",
+            "abc 3 d",
+            "1 2 kk",
+            "2 0 /");
 
     public static final List<String> stackState = Arrays.asList(
             "stack: 5 2",
@@ -30,7 +33,10 @@ public class CalculatorTest {
             "stack: 10.5",
             "stack: -1",
             "stack: 120",
-            "stack: 11");
+            "stack: 11",
+            "stack:",
+            "stack: 1 2",
+            "stack: 2 0");
 
     public static final List<String> messages = Arrays.asList(
             "",
@@ -40,10 +46,13 @@ public class CalculatorTest {
             "",
             "",
             "",
-            "operator * (position: 15): insucient parameters");
+            "operator * (position: 15): insucient parameters",
+            "非法输入...",
+            "非法输入...",
+            "不能除以零");
 
     @Test
-    public void testAddMaxInteger() {
+    public void testCalculator() {
         Calculator rpn = new Calculator();
         rpn.initMyState();
 
@@ -59,7 +68,6 @@ public class CalculatorTest {
             String actualMessage = rpn.getStateManager().getMessage();
             assertEquals(expectedOutput, actualContent);
             assertEquals(expectedMessage, actualMessage);
-
         }
     }
 }

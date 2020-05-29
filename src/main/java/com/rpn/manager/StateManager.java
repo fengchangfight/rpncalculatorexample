@@ -257,6 +257,7 @@ public class StateManager {
             numberStack.push(ret);
             undo.addAction('-', null);
         }catch (RuntimeException e){
+            message = e.getMessage();
             //复原两个弹出参数
             applyLastUndoLog();
         }
