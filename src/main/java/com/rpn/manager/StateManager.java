@@ -147,73 +147,20 @@ public class StateManager {
         //以上解析出本轮的token，下面根据token的类型（例如数字，运算符，操作命令，非法输入，分别进行操作)
 
         if(type==1){
-            // 一元运算符
-            //操作符, 判定操作符类型，取相应栈顶元素，弹出并计算结果值，压回栈，把相应的反操作记录到undolog栈顶，undolog栈元素可以是一系列操作，但是这
-
-            if(numberStack.isEmpty()){
-                // 这里有可能出现操作数不足的情况，这是打印出错误信息，并返回lastIndex + 1
-                System.out.println("operator "+currentLine.charAt(rowIndex)+" (position: "+(rowIndex+1)+"): insucient parameters");
-                // 这样返回可在上层终止parsing
-                rowIndex = 0;
+            int code = handleUnaryOperation(currentLine, element);
+            if(code==-1){
                 return currentLine.length();
             }
-            UndoLog undo = new UndoLog();
-            BaseUnaryOperation uop = OperatorFactory.makeUnaryOperation(element);
-            //取栈顶元素，计算
-            BigDecimal out = numberStack.pop();
-            //将逆操作加入undo
-            undo.addAction('+', out);
-            BigDecimal ret = uop.doOperation(out);
-            //逆操作，出栈
-            undo.addAction('-', null);
-            //算完推回栈
-            numberStack.push(ret);
-
-            //将本组undo操作集合加入undoLogStack
-            undoLogStack.add(undo);
         }else if(type==2){
-            //二元运算符
-            if(numberStack.isEmpty() || numberStack.size()<2){
-                //参数不够的情况
-                System.out.println("operator "+currentLine.charAt(rowIndex)+" (position: "+(rowIndex+1)+"): insucient parameters");
-                rowIndex = 0;
+            int code = handleBinaryOperation(currentLine, element);
+            if(code==-1){
                 return currentLine.length();
-            }
-            //弹出两个操作数
-            UndoLog undo = new UndoLog();
-            BigDecimal secondVal = numberStack.pop();
-            BigDecimal firstVal  = numberStack.pop();
-            undo.addAction('+', secondVal);
-            undo.addAction('+', firstVal);
-
-            BaseBinaryOperation binop = OperatorFactory.makeBinaryOperation(element);
-            undoLogStack.push(undo);
-
-            try{
-                BigDecimal ret = binop.doOperation(firstVal, secondVal);
-                numberStack.push(ret);
-                undo.addAction('-', null);
-            }catch (RuntimeException e){
-                //复原两个弹出参数
-                applyLastUndoLog();
             }
         }else if(type==5)
         {
-            //操作指令， 如clear, undo
-            if("clear".equals(element)){
-                this.clear();
-            }else if("undo".equals(element)){
-                applyLastUndoLog();
-            }else{
-                throw new RuntimeException("Unsupported command");
-            }
+            handleCommands(element);
         }else if(type==0){
-            //操作数,操作数入栈，更新反操作到undolog栈的栈顶
-            BigDecimal val = (new BigDecimal(element)).setScale(15, BigDecimal.ROUND_DOWN);
-            numberStack.push(val);
-            UndoLog undo = new UndoLog();
-            undo.addAction('-', null);
-            undoLogStack.push(undo);
+            handleNumbers(element);
         }else{
             // 非法输入,直接返回lastIndex+1;
             System.out.println("非法输入...");
@@ -230,6 +177,81 @@ public class StateManager {
             }
             return i;
         }
+    }
+    private void handleNumbers(String element){
+        //操作数,操作数入栈，更新反操作到undolog栈的栈顶
+        BigDecimal val = (new BigDecimal(element)).setScale(15, BigDecimal.ROUND_DOWN);
+        numberStack.push(val);
+        UndoLog undo = new UndoLog();
+        undo.addAction('-', null);
+        undoLogStack.push(undo);
+    }
+    private void handleCommands(String element){
+        //操作指令， 如clear, undo
+        if("clear".equals(element)){
+            this.clear();
+        }else if("undo".equals(element)){
+            applyLastUndoLog();
+        }else{
+            throw new RuntimeException("Unsupported command");
+        }
+    }
+    private int handleUnaryOperation(String currentLine, String element){
+        // 一元运算符
+        //操作符, 判定操作符类型，取相应栈顶元素，弹出并计算结果值，压回栈，把相应的反操作记录到undolog栈顶，undolog栈元素可以是一系列操作，但是这
+
+        if(numberStack.isEmpty()){
+            // 这里有可能出现操作数不足的情况，这是打印出错误信息，并返回lastIndex + 1
+            System.out.println("operator "+currentLine.charAt(rowIndex)+" (position: "+(rowIndex+1)+"): insucient parameters");
+            // 这样返回可在上层终止parsing
+            rowIndex = 0;
+            return -1;
+        }
+        UndoLog undo = new UndoLog();
+        BaseUnaryOperation uop = OperatorFactory.makeUnaryOperation(element);
+        //取栈顶元素，计算
+        BigDecimal out = numberStack.pop();
+        //将逆操作加入undo
+        undo.addAction('+', out);
+        BigDecimal ret = uop.doOperation(out);
+        //逆操作，出栈
+        undo.addAction('-', null);
+        //算完推回栈
+        numberStack.push(ret);
+
+        //将本组undo操作集合加入undoLogStack
+        undoLogStack.add(undo);
+
+        return 0;
+    }
+    private int handleBinaryOperation(String currentLine, String element){
+        //二元运算符
+        if(numberStack.isEmpty() || numberStack.size()<2){
+            //参数不够的情况
+            System.out.println("operator "+currentLine.charAt(rowIndex)+" (position: "+(rowIndex+1)+"): insucient parameters");
+            rowIndex = 0;
+            return -1;
+        }
+        //弹出两个操作数
+        UndoLog undo = new UndoLog();
+        BigDecimal secondVal = numberStack.pop();
+        BigDecimal firstVal  = numberStack.pop();
+        undo.addAction('+', secondVal);
+        undo.addAction('+', firstVal);
+
+        BaseBinaryOperation binop = OperatorFactory.makeBinaryOperation(element);
+        undoLogStack.push(undo);
+
+        try{
+            BigDecimal ret = binop.doOperation(firstVal, secondVal);
+            numberStack.push(ret);
+            undo.addAction('-', null);
+        }catch (RuntimeException e){
+            //复原两个弹出参数
+            applyLastUndoLog();
+        }
+
+        return 0;
     }
 
     /**
