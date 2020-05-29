@@ -210,10 +210,7 @@ public class StateManager {
 
         if(numberStack.isEmpty()){
             // 这里有可能出现操作数不足的情况，这是打印出错误信息，并返回lastIndex + 1
-            message = "operator "+currentLine.charAt(rowIndex)+" (position: "+(rowIndex+1)+"): insucient parameters";
-            System.out.println(message);
-            // 这样返回可在上层终止parsing
-            rowIndex = 0;
+            missOpsMessage(currentLine);
             return -1;
         }
         UndoLog undo = new UndoLog();
@@ -237,13 +234,17 @@ public class StateManager {
         }
         return 0;
     }
+    private void missOpsMessage(String currentLine){
+        message = "operator "+currentLine.charAt(rowIndex)+" (position: "+(rowIndex+1)+"): insucient parameters";
+        System.out.println(message);
+        // 这样返回可在上层终止parsing
+        rowIndex = 0;
+    }
     private int handleBinaryOperation(String currentLine, String element){
         //二元运算符
         if(numberStack.isEmpty() || numberStack.size()<2){
             //参数不够的情况
-            message = "operator "+currentLine.charAt(rowIndex)+" (position: "+(rowIndex+1)+"): insucient parameters";
-            System.out.println(message);
-            rowIndex = 0;
+            missOpsMessage(currentLine);
             return -1;
         }
         //弹出两个操作数
