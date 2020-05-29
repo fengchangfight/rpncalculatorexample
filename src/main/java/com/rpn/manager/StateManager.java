@@ -222,15 +222,19 @@ public class StateManager {
         BigDecimal out = numberStack.pop();
         //将逆操作加入undo
         undo.addAction('+', out);
-        BigDecimal ret = uop.doOperation(out);
-        //逆操作，出栈
-        undo.addAction('-', null);
-        //算完推回栈
-        numberStack.push(ret);
-
         //将本组undo操作集合加入undoLogStack
         undoLogStack.add(undo);
-
+        try{
+            BigDecimal ret = uop.doOperation(out);
+            //逆操作，出栈
+            undo.addAction('-', null);
+            //算完推回栈
+            numberStack.push(ret);
+        }catch (RuntimeException e){
+            message = e.getMessage();
+            System.out.println(message);
+            applyLastUndoLog();
+        }
         return 0;
     }
     private int handleBinaryOperation(String currentLine, String element){

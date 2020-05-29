@@ -23,7 +23,8 @@ public class CalculatorTest {
             "1 2 3 * 5 + * * 6 5",
             "abc 3 d",
             "1 2 kk",
-            "2 0 /");
+            "2 0 /",
+            "-1 sqrt");
 
     public static final List<String> stackState = Arrays.asList(
             "stack: 5 2",
@@ -36,7 +37,8 @@ public class CalculatorTest {
             "stack: 11",
             "stack:",
             "stack: 1 2",
-            "stack: 2 0");
+            "stack: 2 0",
+            "stack: -1");
 
     public static final List<String> messages = Arrays.asList(
             "",
@@ -49,7 +51,8 @@ public class CalculatorTest {
             "operator * (position: 15): insucient parameters",
             "非法输入...",
             "非法输入...",
-            "不能除以零");
+            "不能除以零",
+            "该数不能开方");
 
     @Test
     public void testCalculator() {

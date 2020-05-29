@@ -12,7 +12,12 @@ public class SqrtUnaryOperation extends BaseUnaryOperation {
 
     @Override
     public BigDecimal doOperation(BigDecimal op){
-        return sqrt(op);
+        try{
+            BigDecimal val = sqrt(op);
+            return val;
+        }catch (Exception e){
+            throw new RuntimeException("该数不能开方");
+        }
     }
 
     private static BigDecimal sqrt(BigDecimal value) {
