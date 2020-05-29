@@ -47,24 +47,13 @@ public class StateManager {
      */
     private Stack<BigDecimal> numberStack = new Stack<>();
 
-    /**
-     * 用户分行输入的全量历史记录
-     */
-//    private List<String> inputSequence = new ArrayList<>();
-
     private String currentInputLine="";
-
-    /**
-     * 解析器扫描游标记录，目前在inputSequence当中解析到了第几行
-     */
-//    private Integer seqIndex=0;
 
     /**
      * 解析器扫描游标记录,目前在行内解析到了第几个字符
      */
     private Integer rowIndex=0;
-
-
+    
     public void resetAll(){
         clear();
         rowIndex = 0;
