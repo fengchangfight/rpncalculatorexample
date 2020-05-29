@@ -49,6 +49,12 @@ public class StateManager {
 
     private String currentInputLine="";
 
+    private String message = "";
+
+    public String getMessage(){
+        return message;
+    }
+
     /**
      * 解析器扫描游标记录,目前在行内解析到了第几个字符
      */
@@ -58,6 +64,7 @@ public class StateManager {
         clear();
         rowIndex = 0;
         currentInputLine = "";
+        message = "";
     }
     /**
      * 应用undo log, 更新numstack，弹出undo log本身栈顶元素
@@ -163,7 +170,8 @@ public class StateManager {
             handleNumbers(element);
         }else{
             // 非法输入,直接返回lastIndex+1;
-            System.out.println("非法输入...");
+            message = "非法输入...";
+            System.out.println(message);
             return currentLine.length();
         }
 
@@ -202,7 +210,8 @@ public class StateManager {
 
         if(numberStack.isEmpty()){
             // 这里有可能出现操作数不足的情况，这是打印出错误信息，并返回lastIndex + 1
-            System.out.println("operator "+currentLine.charAt(rowIndex)+" (position: "+(rowIndex+1)+"): insucient parameters");
+            message = "operator "+currentLine.charAt(rowIndex)+" (position: "+(rowIndex+1)+"): insucient parameters";
+            System.out.println(message);
             // 这样返回可在上层终止parsing
             rowIndex = 0;
             return -1;
@@ -228,7 +237,8 @@ public class StateManager {
         //二元运算符
         if(numberStack.isEmpty() || numberStack.size()<2){
             //参数不够的情况
-            System.out.println("operator "+currentLine.charAt(rowIndex)+" (position: "+(rowIndex+1)+"): insucient parameters");
+            message = "operator "+currentLine.charAt(rowIndex)+" (position: "+(rowIndex+1)+"): insucient parameters";
+            System.out.println(message);
             rowIndex = 0;
             return -1;
         }

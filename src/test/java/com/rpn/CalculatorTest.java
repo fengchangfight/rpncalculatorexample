@@ -32,6 +32,15 @@ public class CalculatorTest {
             "stack: 120",
             "stack: 11");
 
+    public static final List<String> messages = Arrays.asList(
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "operator * (position: 15): insucient parameters");
 
     @Test
     public void testAddMaxInteger() {
@@ -42,11 +51,15 @@ public class CalculatorTest {
             rpn.reset();
             String input = inputs.get(i);
             String expectedOutput = stackState.get(i);
+            String expectedMessage = messages.get(i);
             rpn.getStateManager().addNewLine(input);
             rpn.getStateManager().parseLine();
             // check state
             String actualContent = rpn.getStateManager().getStackContent();
+            String actualMessage = rpn.getStateManager().getMessage();
             assertEquals(expectedOutput, actualContent);
+            assertEquals(expectedMessage, actualMessage);
+
         }
     }
 }
