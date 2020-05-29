@@ -2,6 +2,10 @@ package com.rpn.operator;
 
 import java.math.BigDecimal;
 
+/**
+ * @author xiefengchang
+ */
+
 public class MultiplyOperation extends BaseBinaryOperation {
     public MultiplyOperation(){
         super("*");

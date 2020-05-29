@@ -2,6 +2,9 @@ package com.rpn.operator;
 
 import java.math.BigDecimal;
 
+/**
+ * @author xiefengchang
+ */
 public class AddOperation extends BaseBinaryOperation {
     public AddOperation(){
         super("+");

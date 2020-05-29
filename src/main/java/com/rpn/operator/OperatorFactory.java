@@ -1,5 +1,8 @@
 package com.rpn.operator;
 
+/**
+ * @author xiefengchang
+ */
 public class OperatorFactory {
     public static BaseUnaryOperation makeUnaryOperation(String sign){
         switch (sign){
